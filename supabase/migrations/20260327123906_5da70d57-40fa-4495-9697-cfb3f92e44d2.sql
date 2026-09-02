@@ -1,0 +1,2 @@
+ALTER TABLE public.business_subscriptions DROP CONSTRAINT business_subscriptions_payment_gateway_check;
+ALTER TABLE public.business_subscriptions ADD CONSTRAINT business_subscriptions_payment_gateway_check CHECK ((payment_gateway IS NULL) OR (payment_gateway = ANY (ARRAY['abacatepay'::text, 'mercadopago'::text, 'cakto'::text, 'manual'::text])));

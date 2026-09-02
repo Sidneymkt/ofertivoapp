@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS "Business owners can sponsor campaigns" ON public.crowdfunding_campaigns;

@@ -1,0 +1,1 @@
+ALTER TABLE public.crowdfunding_campaigns ADD COLUMN video_url TEXT DEFAULT NULL;

@@ -1,0 +1,1 @@
+UPDATE subscription_plans SET price_monthly = 9.99 WHERE id = '216de0bc-89f5-4c00-9572-5f5f8ec5c577';
