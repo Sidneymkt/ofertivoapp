@@ -14,13 +14,493 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      businesses: {
+        Row: {
+          address: string
+          category: string
+          cover_image_url: string | null
+          created_at: string
+          description: string | null
+          email: string | null
+          followers_count: number | null
+          id: string
+          is_active: boolean | null
+          latitude: number
+          logo_url: string | null
+          longitude: number
+          name: string
+          owner_id: string
+          phone: string | null
+          updated_at: string
+          website: string | null
+          whatsapp: string | null
+        }
+        Insert: {
+          address: string
+          category: string
+          cover_image_url?: string | null
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          followers_count?: number | null
+          id?: string
+          is_active?: boolean | null
+          latitude: number
+          logo_url?: string | null
+          longitude: number
+          name: string
+          owner_id: string
+          phone?: string | null
+          updated_at?: string
+          website?: string | null
+          whatsapp?: string | null
+        }
+        Update: {
+          address?: string
+          category?: string
+          cover_image_url?: string | null
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          followers_count?: number | null
+          id?: string
+          is_active?: boolean | null
+          latitude?: number
+          logo_url?: string | null
+          longitude?: number
+          name?: string
+          owner_id?: string
+          phone?: string | null
+          updated_at?: string
+          website?: string | null
+          whatsapp?: string | null
+        }
+        Relationships: []
+      }
+      favorites: {
+        Row: {
+          created_at: string
+          id: string
+          offer_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          offer_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          offer_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "favorites_offer_id_fkey"
+            columns: ["offer_id"]
+            isOneToOne: false
+            referencedRelation: "offers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      follows: {
+        Row: {
+          business_id: string
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          business_id: string
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          business_id?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "follows_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      offers: {
+        Row: {
+          business_id: string
+          category: string
+          created_at: string
+          current_uses: number | null
+          description: string | null
+          discount_percentage: number | null
+          discounted_price: number
+          id: string
+          image_url: string | null
+          is_active: boolean | null
+          latitude: number
+          likes_count: number | null
+          longitude: number
+          max_uses: number | null
+          original_price: number
+          shares_count: number | null
+          title: string
+          updated_at: string
+          valid_until: string
+          views_count: number | null
+        }
+        Insert: {
+          business_id: string
+          category: string
+          created_at?: string
+          current_uses?: number | null
+          description?: string | null
+          discount_percentage?: number | null
+          discounted_price: number
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          latitude: number
+          likes_count?: number | null
+          longitude: number
+          max_uses?: number | null
+          original_price: number
+          shares_count?: number | null
+          title: string
+          updated_at?: string
+          valid_until: string
+          views_count?: number | null
+        }
+        Update: {
+          business_id?: string
+          category?: string
+          created_at?: string
+          current_uses?: number | null
+          description?: string | null
+          discount_percentage?: number | null
+          discounted_price?: number
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          latitude?: number
+          likes_count?: number | null
+          longitude?: number
+          max_uses?: number | null
+          original_price?: number
+          shares_count?: number | null
+          title?: string
+          updated_at?: string
+          valid_until?: string
+          views_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "offers_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          address: string | null
+          avatar_url: string | null
+          city: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          phone: string | null
+          state: string | null
+          total_points: number | null
+          updated_at: string
+          user_id: string
+          user_type: string
+        }
+        Insert: {
+          address?: string | null
+          avatar_url?: string | null
+          city?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          state?: string | null
+          total_points?: number | null
+          updated_at?: string
+          user_id: string
+          user_type?: string
+        }
+        Update: {
+          address?: string | null
+          avatar_url?: string | null
+          city?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          state?: string | null
+          total_points?: number | null
+          updated_at?: string
+          user_id?: string
+          user_type?: string
+        }
+        Relationships: []
+      }
+      qr_codes: {
+        Row: {
+          business_id: string
+          code: string
+          created_at: string
+          expires_at: string
+          id: string
+          is_used: boolean | null
+          offer_id: string
+          used_at: string | null
+          used_by: string | null
+        }
+        Insert: {
+          business_id: string
+          code: string
+          created_at?: string
+          expires_at: string
+          id?: string
+          is_used?: boolean | null
+          offer_id: string
+          used_at?: string | null
+          used_by?: string | null
+        }
+        Update: {
+          business_id?: string
+          code?: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          is_used?: boolean | null
+          offer_id?: string
+          used_at?: string | null
+          used_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "qr_codes_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "qr_codes_offer_id_fkey"
+            columns: ["offer_id"]
+            isOneToOne: false
+            referencedRelation: "offers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      raffle_entries: {
+        Row: {
+          created_at: string
+          entry_number: number
+          id: string
+          raffle_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          entry_number: number
+          id?: string
+          raffle_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          entry_number?: number
+          id?: string
+          raffle_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "raffle_entries_raffle_id_fkey"
+            columns: ["raffle_id"]
+            isOneToOne: false
+            referencedRelation: "raffles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      raffles: {
+        Row: {
+          business_id: string
+          created_at: string
+          current_participants: number | null
+          description: string | null
+          end_date: string
+          entry_cost: number
+          id: string
+          image_url: string | null
+          is_active: boolean | null
+          max_participants: number | null
+          prize: string
+          start_date: string
+          title: string
+          winner_id: string | null
+        }
+        Insert: {
+          business_id: string
+          created_at?: string
+          current_participants?: number | null
+          description?: string | null
+          end_date: string
+          entry_cost?: number
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          max_participants?: number | null
+          prize: string
+          start_date?: string
+          title: string
+          winner_id?: string | null
+        }
+        Update: {
+          business_id?: string
+          created_at?: string
+          current_participants?: number | null
+          description?: string | null
+          end_date?: string
+          entry_cost?: number
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          max_participants?: number | null
+          prize?: string
+          start_date?: string
+          title?: string
+          winner_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "raffles_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reviews: {
+        Row: {
+          business_id: string
+          comment: string | null
+          created_at: string
+          id: string
+          offer_id: string
+          rating: number
+          user_id: string
+        }
+        Insert: {
+          business_id: string
+          comment?: string | null
+          created_at?: string
+          id?: string
+          offer_id: string
+          rating: number
+          user_id: string
+        }
+        Update: {
+          business_id?: string
+          comment?: string | null
+          created_at?: string
+          id?: string
+          offer_id?: string
+          rating?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_offer_id_fkey"
+            columns: ["offer_id"]
+            isOneToOne: false
+            referencedRelation: "offers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_points: {
+        Row: {
+          action_type: string
+          business_id: string | null
+          created_at: string
+          description: string | null
+          id: string
+          offer_id: string | null
+          points_earned: number
+          user_id: string
+        }
+        Insert: {
+          action_type: string
+          business_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          offer_id?: string | null
+          points_earned: number
+          user_id: string
+        }
+        Update: {
+          action_type?: string
+          business_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          offer_id?: string | null
+          points_earned?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_points_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_points_offer_id_fkey"
+            columns: ["offer_id"]
+            isOneToOne: false
+            referencedRelation: "offers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      update_user_points: {
+        Args: { points_to_add: number; user_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
