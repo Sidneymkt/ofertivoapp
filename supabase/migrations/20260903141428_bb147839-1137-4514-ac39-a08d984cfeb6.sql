@@ -1,0 +1,1 @@
+REVOKE EXECUTE ON FUNCTION public.update_user_points(UUID, INTEGER) FROM anon;
