@@ -695,6 +695,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      apply_migration_sql: { Args: { sql_text: string }; Returns: undefined }
       update_user_points: {
         Args: { points_to_add: number; user_id: string }
         Returns: undefined
