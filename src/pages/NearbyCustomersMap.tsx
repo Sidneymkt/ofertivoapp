@@ -90,7 +90,7 @@ const NearbyCustomersMap = () => {
   const retryCount = useRef(0);
   const maxRetries = 3;
   const movementTick = useRef(0);
-  const movementInterval = useRef<NodeJS.Timeout | null>(null);
+  const movementInterval = useRef<ReturnType<typeof setTimeout> | null>(null);
   
   const [detailUser, setDetailUser] = useState<EngagedUser | null>(null);
   const [messageDialogOpen, setMessageDialogOpen] = useState(false);
@@ -460,7 +460,7 @@ const NearbyCustomersMap = () => {
   useEffect(() => {
     if (!business || !mapContainer.current) return;
     let cancelled = false;
-    let loadTimeout: NodeJS.Timeout;
+    let loadTimeout: ReturnType<typeof setTimeout>;
 
     const initializeMap = async () => {
       try {

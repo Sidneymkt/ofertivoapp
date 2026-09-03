@@ -141,7 +141,7 @@ export const AdminOfferManagement = () => {
       
       if (error) throw error;
       
-      const uniqueCategories = [...new Set(data.map(item => item.category))];
+      const uniqueCategories = [...new Set(data.map((item: any) => item.category))] as string[];
       return uniqueCategories;
     },
   });

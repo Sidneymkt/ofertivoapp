@@ -79,8 +79,8 @@ export const UserChatList = ({ onChatSelect }: UserChatListProps) => {
           .neq('sender_id', user.id),
       ]);
 
-      const businessesMap = new Map((businessesRes.data || []).map((b: any) => [b.id, b]));
-      const profilesMap = new Map((profilesRes.data || []).map((p: any) => [p.user_id, p]));
+      const businessesMap = new Map<any, any>((businessesRes.data || []).map((b: any) => [b.id, b]));
+      const profilesMap = new Map<any, any>((profilesRes.data || []).map((p: any) => [p.user_id, p]));
 
       const lastMsgByChat = new Map<string, any>();
       for (const m of messagesRes.data || []) {

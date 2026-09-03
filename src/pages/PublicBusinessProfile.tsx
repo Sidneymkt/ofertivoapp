@@ -58,7 +58,7 @@ const PublicBusinessProfile = () => {
   const [newRating, setNewRating] = useState(5);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const hasScrolledRef = useRef(false);
-  const scrollLockTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const scrollLockTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Track consumer presence for this business
   useBusinessPresence(businessId);

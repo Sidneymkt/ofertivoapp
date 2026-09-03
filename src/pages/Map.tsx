@@ -279,7 +279,7 @@ const Map = () => {
 
   useEffect(() => {
     let cancelled = false;
-    let loadTimeout: NodeJS.Timeout;
+    let loadTimeout: ReturnType<typeof setTimeout>;
 
     const initializeMap = async () => {
       try {

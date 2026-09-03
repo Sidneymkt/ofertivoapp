@@ -172,7 +172,7 @@ export const RankingSection = () => {
         .select('user_id, full_name, avatar_url')
         .in('user_id', topUserIds);
       
-      const profileMap = new Map((profiles || []).map(p => [p.user_id, p]));
+      const profileMap = new Map<any, any>((profiles || []).map(p => [p.user_id, p]));
       
       return topUserIds.map(userId => {
         const profile = profileMap.get(userId);
@@ -277,7 +277,7 @@ export const RankingSection = () => {
         .select('id, name, logo_url')
         .in('id', topBusinessIds);
       
-      const businessMap = new Map((businesses || []).map(b => [b.id, b]));
+      const businessMap = new Map<any, any>((businesses || []).map(b => [b.id, b]));
       
       return topBusinessIds.map(bizId => {
         const business = businessMap.get(bizId);
@@ -340,7 +340,7 @@ export const RankingSection = () => {
         .select('id, name, logo_url')
         .in('id', topSponsorIds);
       
-      const businessMap = new Map((businesses || []).map(b => [b.id, b]));
+      const businessMap = new Map<any, any>((businesses || []).map(b => [b.id, b]));
       
       return topSponsorIds.map(bizId => {
         const business = businessMap.get(bizId);

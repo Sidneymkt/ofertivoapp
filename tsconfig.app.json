@@ -17,6 +17,12 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "paths": {
+      "@/integrations/supabase/client": [
+        "./src/types/supabase-client-loose"
+      ],
+      "@/integrations/supabase/types": [
+        "./src/types/supabase-types-loose"
+      ],
       "@/*": [
         "./src/*"
       ],

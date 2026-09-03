@@ -60,7 +60,7 @@ export const PostMentionSelector = ({ mentions, onMentionsChange }: PostMentionS
               .select('id, name')
               .in('id', businessIds);
             
-            const businessMap = new Map(businesses?.map(b => [b.id, b.name]) || []);
+            const businessMap = new Map<any, any>(businesses?.map(b => [b.id, b.name]) || []);
             data = offers.map(o => ({
               id: o.id,
               name: o.title,

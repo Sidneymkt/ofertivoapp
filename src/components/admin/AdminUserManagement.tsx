@@ -111,7 +111,7 @@ export const AdminUserManagement = () => {
 
         if (bizErr) throw bizErr;
 
-        businessByOwnerId = new Map(
+        businessByOwnerId = new Map<any, any>(
           (businesses || []).map((b) => [b.owner_id as string, { id: b.id as string, is_active: b.is_active as boolean | null }]),
         );
       }
