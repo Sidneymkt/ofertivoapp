@@ -117,8 +117,8 @@ const ReferralTracking = () => {
           category: business.category || 'Categoria não definida',
           created_at: business.created_at,
           owner_name: businessProfiles.find(p => p.id === business.owner_id)?.full_name || 'Nome não definido',
-          subscription_status: business.business_subscriptions?.[0]?.status || 'Sem assinatura',
-          subscription_plan: business.business_subscriptions?.[0]?.subscription_plans?.name || 'Plano gratuito'
+          subscription_status: (business.business_subscriptions as any)?.[0]?.status || 'Sem assinatura',
+          subscription_plan: (business.business_subscriptions as any)?.[0]?.subscription_plans?.name || 'Plano gratuito'
         })) || [];
 
         setReferredBusinesses(businessData);

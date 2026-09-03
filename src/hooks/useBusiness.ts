@@ -98,7 +98,7 @@ export const useBusiness = () => {
             table: 'businesses',
             filter: `owner_id=eq.${user.id}`,
           },
-          (payload) => {
+          (payload: any) => {
             if (!isMounted) return;
             const nextBusiness = payload.eventType === 'DELETE' ? null : payload.new as BusinessRow;
             setBusiness(nextBusiness);
