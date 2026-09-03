@@ -2402,6 +2402,63 @@ export type Database = {
           },
         ]
       }
+      offer_orders: {
+        Row: {
+          amount: number
+          business_id: string
+          canceled_at: string | null
+          confirmed_at: string | null
+          confirmed_by: string | null
+          consumer_id: string
+          consumer_phone: string | null
+          created_at: string
+          crm_lead_id: string | null
+          id: string
+          offer_id: string
+          pix_key_snapshot: Json
+          points_to_award: number
+          status: string
+          tx_code: string
+          updated_at: string
+        }
+        Insert: {
+          amount?: number
+          business_id: string
+          canceled_at?: string | null
+          confirmed_at?: string | null
+          confirmed_by?: string | null
+          consumer_id: string
+          consumer_phone?: string | null
+          created_at?: string
+          crm_lead_id?: string | null
+          id?: string
+          offer_id: string
+          pix_key_snapshot?: Json
+          points_to_award?: number
+          status?: string
+          tx_code: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          business_id?: string
+          canceled_at?: string | null
+          confirmed_at?: string | null
+          confirmed_by?: string | null
+          consumer_id?: string
+          consumer_phone?: string | null
+          created_at?: string
+          crm_lead_id?: string | null
+          id?: string
+          offer_id?: string
+          pix_key_snapshot?: Json
+          points_to_award?: number
+          status?: string
+          tx_code?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       offer_views: {
         Row: {
           created_at: string
@@ -3597,54 +3654,6 @@ export type Database = {
         }
         Relationships: []
       }
-      test_apply_helper: {
-        Row: {
-          id: string
-        }
-        Insert: {
-          id?: string
-        }
-        Update: {
-          id?: string
-        }
-        Relationships: []
-      }
-      test_grant_helper: {
-        Row: {
-          id: string
-        }
-        Insert: {
-          id?: string
-        }
-        Update: {
-          id?: string
-        }
-        Relationships: []
-      }
-      test_owner_check: {
-        Row: {
-          id: string
-        }
-        Insert: {
-          id?: string
-        }
-        Update: {
-          id?: string
-        }
-        Relationships: []
-      }
-      test_run_sql: {
-        Row: {
-          id: string
-        }
-        Insert: {
-          id?: string
-        }
-        Update: {
-          id?: string
-        }
-        Relationships: []
-      }
       transactions: {
         Row: {
           amount: number
@@ -4142,6 +4151,7 @@ export type Database = {
         Args: { business_id_param: string }
         Returns: undefined
       }
+      complete_daily_mission: { Args: { p_mission_key: string }; Returns: Json }
       conduct_raffle: { Args: { raffle_id_param: string }; Returns: Json }
       conduct_raffle_internal: {
         Args: { raffle_id_param: string }
@@ -4149,6 +4159,10 @@ export type Database = {
       }
       confirm_delivery_checkin: {
         Args: { p_offer_id: string; p_user_id: string }
+        Returns: Json
+      }
+      confirm_offer_order: {
+        Args: { p_ip?: string; p_order_id: string; p_user_agent?: string }
         Returns: Json
       }
       contribute_to_campaign: {
@@ -4182,6 +4196,38 @@ export type Database = {
           p_user_id: string
         }
         Returns: string
+      }
+      create_offer_pix_order: {
+        Args: {
+          p_amount: number
+          p_consumer_phone?: string
+          p_offer_id: string
+          p_points_to_award: number
+        }
+        Returns: {
+          amount: number
+          business_id: string
+          canceled_at: string | null
+          confirmed_at: string | null
+          confirmed_by: string | null
+          consumer_id: string
+          consumer_phone: string | null
+          created_at: string
+          crm_lead_id: string | null
+          id: string
+          offer_id: string
+          pix_key_snapshot: Json
+          points_to_award: number
+          status: string
+          tx_code: string
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "offer_orders"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       create_platform_pix_donation: {
         Args: { p_campaign_id?: string; p_valor_total: number }
@@ -4291,6 +4337,17 @@ export type Database = {
       get_ai_text_improvement_usage_this_month: {
         Args: { p_business_id: string }
         Returns: number
+      }
+      get_business_customer_profiles: {
+        Args: { p_business_id: string; p_user_ids: string[] }
+        Returns: {
+          avatar_url: string
+          city: string
+          full_name: string
+          phone: string
+          state: string
+          user_id: string
+        }[]
       }
       get_business_wallet_balance: {
         Args: { p_business_id: string }
@@ -4478,6 +4535,10 @@ export type Database = {
         Args: { p_interests: string[]; p_offer_id: string }
         Returns: undefined
       }
+      sync_achievement_credits: {
+        Args: { p_business_id: string }
+        Returns: Json
+      }
       transfer_points: {
         Args: {
           p_amount: number
@@ -4537,7 +4598,6 @@ export type Database = {
         }
         Returns: Json
       }
-      whoami: { Args: never; Returns: string }
     }
     Enums: {
       [_ in never]: never
