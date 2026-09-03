@@ -68,7 +68,7 @@ const Raffles = () => {
         .order('end_date', { ascending: true });
 
       if (error) throw error;
-      const rafflesData = (data as AvailableRaffle[]) || [];
+      const rafflesData = (data as unknown as AvailableRaffle[]) || [];
       setRaffles(rafflesData);
 
       if (user && rafflesData.length > 0) {

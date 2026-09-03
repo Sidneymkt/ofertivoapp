@@ -114,11 +114,11 @@ export default function PublicRaffleResult() {
       const totalTickets = entries?.reduce((sum, e) => sum + e.number_of_entries, 0) || 0;
 
       setRaffle({
-        ...raffleData,
+        ...(raffleData as any),
         winner: winnerData,
         total_participants: totalParticipants,
         total_tickets: totalTickets
-      });
+      } as any);
 
     } catch (error: any) {
       console.error('Error fetching raffle result:', error);

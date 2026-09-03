@@ -115,7 +115,7 @@ const Transparencia = () => {
         .limit(20);
 
       if (movs) {
-        setMovimentacoes(movs);
+        setMovimentacoes(movs as any);
       }
 
       // Contar campanhas ativas

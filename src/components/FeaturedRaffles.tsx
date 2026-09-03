@@ -63,7 +63,7 @@ export const FeaturedRaffles = () => {
         .limit(3);
 
       if (error) throw error;
-      setRaffles(data || []);
+      setRaffles((data as any) || []);
     } catch (error) {
       console.error('Erro ao buscar sorteios:', error);
     } finally {

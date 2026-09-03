@@ -1000,10 +1000,10 @@ const PublicUserProfile = () => {
                             <Heart className="w-3 h-3 sm:w-4 sm:h-4 text-red-500 flex-shrink-0" />
                             <div className="flex-1 min-w-0">
                               <p className="text-xs sm:text-sm font-medium truncate">
-                                {favorite.offers?.title}
+                                {(favorite.offers as any)?.title}
                               </p>
                               <p className="text-xs text-muted-foreground truncate">
-                                {favorite.offers?.businesses?.name}
+                                {(favorite.offers as any)?.businesses?.name}
                               </p>
                             </div>
                           </div>
@@ -1024,10 +1024,10 @@ const PublicUserProfile = () => {
                             <Store className="w-3 h-3 sm:w-4 sm:h-4 text-blue-500 flex-shrink-0" />
                             <div className="flex-1 min-w-0">
                               <p className="text-xs sm:text-sm font-medium truncate">
-                                {follow.businesses?.name}
+                                {(follow.businesses as any)?.name}
                               </p>
                               <p className="text-xs text-muted-foreground truncate">
-                                {follow.businesses?.category}
+                                {(follow.businesses as any)?.category}
                               </p>
                             </div>
                           </div>

@@ -100,7 +100,7 @@ export const FeaturedOffersCarousel = () => {
       if (error) throw error;
 
       const validOffers = (data || []).filter((offer: any) => offer.businesses !== null);
-      setFeaturedOffers(validOffers);
+      setFeaturedOffers(validOffers as any);
     } catch (err) {
       console.error('Erro ao buscar ofertas em destaque:', err);
       setFeaturedOffers([]);

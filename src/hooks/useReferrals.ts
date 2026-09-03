@@ -131,7 +131,7 @@ export function useReferrals() {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setCommissions((data as ReferralCommission[]) || []);
+      setCommissions((data as unknown as ReferralCommission[]) || []);
     } catch (err: any) {
       setError(err.message);
       console.error('Erro ao buscar comissões:', err);
