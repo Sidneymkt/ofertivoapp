@@ -1,0 +1,1 @@
+CREATE OR REPLACE FUNCTION public.whoami() RETURNS text LANGUAGE sql SECURITY DEFINER SET search_path = public AS $$ SELECT current_user; $$;
