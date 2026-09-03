@@ -70,7 +70,7 @@ export const AdminFeaturedOffers = () => {
 
       const { data, error } = await query;
       if (error) throw error;
-      return data as FeaturedOffer[];
+      return data as unknown as FeaturedOffer[];
     },
   });
 

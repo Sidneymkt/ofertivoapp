@@ -47,7 +47,7 @@ export const useOfferViews = () => {
         .limit(100);
 
       if (error) throw error;
-      setViews(data || []);
+      setViews((data as any) || []);
     } catch (error) {
       console.error('Error loading offer views:', error);
     } finally {

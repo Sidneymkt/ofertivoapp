@@ -90,7 +90,7 @@ export const RecentOffersCarousel = () => {
 
       if (error) throw error;
 
-      const validOffers = (data || []).filter(offer => offer.business) as RecentOffer[];
+      const validOffers = (data || []).filter(offer => offer.business) as unknown as RecentOffer[];
       setOffers(validOffers);
     } catch (error) {
       console.error('Error fetching recent offers:', error);

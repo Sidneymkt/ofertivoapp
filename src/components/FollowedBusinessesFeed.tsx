@@ -71,7 +71,7 @@ export const FollowedBusinessesFeed: React.FC = () => {
         .limit(20);
 
       if (error) throw error;
-      setOffers(data || []);
+      setOffers((data as any) || []);
     } catch (error) {
       console.error('Error loading followed businesses offers:', error);
     } finally {

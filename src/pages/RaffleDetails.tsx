@@ -94,7 +94,7 @@ const RaffleDetailsPage = () => {
         .single();
 
       if (error) throw error;
-      setRaffle(data as RaffleDetails);
+      setRaffle(data as unknown as RaffleDetails);
     } catch (error) {
       console.error('Error loading raffle details:', error);
       toast.error('Erro ao carregar detalhes do sorteio');
