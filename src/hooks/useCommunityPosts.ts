@@ -92,7 +92,7 @@ export const useCommunityPosts = () => {
       if (commentsResult.error) throw commentsResult.error;
       if (userLikesResult.error) throw userLikesResult.error;
 
-      const profileMap = new Map(
+      const profileMap = new Map<any, any>(
         (profilesResult.data || []).map((profile) => [profile.user_id, profile])
       );
 

@@ -85,7 +85,7 @@ const RecentCheckinsCard: React.FC<RecentCheckinsCardProps> = ({ businessId }) =
           .select('id, title')
           .in('id', offerIds);
         
-        offerMap = new Map(offers?.map(o => [o.id, o.title]) || []);
+        offerMap = new Map<any, any>(offers?.map(o => [o.id, o.title]) || []);
       }
 
       const enrichedCheckins: CheckinData[] = allCheckins.map(checkin => {

@@ -72,7 +72,7 @@ export const LeadHistoryTimeline: React.FC<{ businessId: string; userId: string 
         ]);
 
         const offerIds = (offersRes.data || []).map(o => o.id);
-        const offerTitleMap = new Map((offersRes.data || []).map(o => [o.id, o.title]));
+        const offerTitleMap = new Map<any, any>((offersRes.data || []).map(o => [o.id, o.title]));
 
         const [favRes, viewRes] = offerIds.length ? await Promise.all([
           supabase.from('favorites')

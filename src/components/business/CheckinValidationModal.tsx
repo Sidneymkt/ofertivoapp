@@ -84,7 +84,7 @@ const CheckinValidationModal: React.FC<CheckinValidationModalProps> = ({
       const { data: profiles } = ids.length
         ? await supabase.from('profiles').select('user_id, full_name').in('user_id', ids)
         : { data: [] as any[] };
-      const pMap = new Map((profiles || []).map((p: any) => [p.user_id, p.full_name]));
+      const pMap = new Map<any, any>((profiles || []).map((p: any) => [p.user_id, p.full_name]));
 
       setDeliveryClients(list.map(o => ({
         id: o.id,

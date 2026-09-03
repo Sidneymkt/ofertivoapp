@@ -84,7 +84,7 @@ export const WeeklyNeighborhoodRanking = () => {
         .select('user_id, full_name, avatar_url, city')
         .in('user_id', allUserIds);
 
-      const profileMap = new Map((profiles || []).map(p => [p.user_id, p]));
+      const profileMap = new Map<any, any>((profiles || []).map(p => [p.user_id, p]));
 
       // Build ranking filtered by city
       const ranking: WeeklyRankingItem[] = allUserIds

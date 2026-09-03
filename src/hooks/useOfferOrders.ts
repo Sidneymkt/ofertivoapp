@@ -42,8 +42,8 @@ export const useBusinessOrders = (businessId?: string) => {
       offerIds.length ? supabase.from('offers').select('id, title, is_delivery').in('id', offerIds) : Promise.resolve({ data: [] as any[] }),
     ]);
 
-    const pMap = new Map((profiles || []).map((p: any) => [p.user_id, p]));
-    const oMap = new Map((offers || []).map((o: any) => [o.id, o]));
+    const pMap = new Map<any, any>((profiles || []).map((p: any) => [p.user_id, p]));
+    const oMap = new Map<any, any>((offers || []).map((o: any) => [o.id, o]));
 
     setOrders(list.map(o => ({
       ...o,

@@ -70,7 +70,7 @@ export const ChatList = ({ onChatSelect }: ChatListProps) => {
           .neq('sender_type', 'business'),
       ]);
 
-      const profilesMap = new Map((profilesRes.data || []).map((p: any) => [p.user_id, p]));
+      const profilesMap = new Map<string, any>((profilesRes.data || []).map((p: any) => [p.user_id, p]));
       const lastByChat = new Map<string, any>();
       for (const m of messagesRes.data || []) {
         if (!lastByChat.has(m.chat_id)) lastByChat.set(m.chat_id, m);

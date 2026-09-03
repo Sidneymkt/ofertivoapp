@@ -21,7 +21,7 @@ export const useCaktoPayment = (businessId: string | null) => {
     planName: null,
     loading: true,
   });
-  const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const pollingIntervalRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pollingCountRef = useRef(0);
   const maxPollingAttempts = 30; // 5 minutos (10 segundos * 30)
 

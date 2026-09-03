@@ -30,7 +30,7 @@ export const useInterests = (options: UseInterestsOptions = {}) => {
   const [popularInterests, setPopularInterests] = useState<Interest[]>([])
   const [loading, setLoading] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
-  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null)
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Buscar interesses populares (mais usados) ao inicializar
   const fetchPopularInterests = useCallback(async () => {

@@ -27,7 +27,7 @@ export const DailyStreakTracker = () => {
       }
 
       // Get unique dates
-      const uniqueDates = [...new Set(completions.map(c => c.mission_date))].sort().reverse();
+      const uniqueDates = ([...new Set(completions.map((c: any) => c.mission_date))] as string[]).sort().reverse();
       
       const today = new Date().toISOString().split('T')[0];
       const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
