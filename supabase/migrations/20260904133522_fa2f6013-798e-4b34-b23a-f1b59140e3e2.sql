@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS "Master admins can manage admin users" ON public.admin_users;
