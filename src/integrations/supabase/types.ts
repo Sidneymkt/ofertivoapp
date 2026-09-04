@@ -3997,18 +3997,6 @@ export type Database = {
           },
         ]
       }
-      zzz_probe: {
-        Row: {
-          id: number | null
-        }
-        Insert: {
-          id?: number | null
-        }
-        Update: {
-          id?: number | null
-        }
-        Relationships: []
-      }
     }
     Views: {
       businesses_public: {
@@ -4106,7 +4094,6 @@ export type Database = {
       }
     }
     Functions: {
-      apply_migration_sql: { Args: { sql_text: string }; Returns: undefined }
       award_special_badge: {
         Args: { badge_name_param: string; user_id_param: string }
         Returns: undefined
@@ -4494,13 +4481,6 @@ export type Database = {
       processar_meta_atingida: {
         Args: { p_campanha_id: string }
         Returns: Json
-      }
-      read_ledger: {
-        Args: never
-        Returns: {
-          name: string
-          version: string
-        }[]
       }
       redeem_advantage: {
         Args: {
