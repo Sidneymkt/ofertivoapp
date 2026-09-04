@@ -940,6 +940,7 @@ export type Database = {
           category: string
           cover_image_url: string | null
           created_at: string
+          custom_mascot_url: string | null
           description: string | null
           email: string | null
           followers_count: number | null
@@ -964,6 +965,7 @@ export type Database = {
           category: string
           cover_image_url?: string | null
           created_at?: string
+          custom_mascot_url?: string | null
           description?: string | null
           email?: string | null
           followers_count?: number | null
@@ -988,6 +990,7 @@ export type Database = {
           category?: string
           cover_image_url?: string | null
           created_at?: string
+          custom_mascot_url?: string | null
           description?: string | null
           email?: string | null
           followers_count?: number | null
@@ -2520,6 +2523,7 @@ export type Database = {
           longitude: number
           max_actions: number | null
           max_uses: number | null
+          offer_type: string
           original_price: number
           points_per_action: number | null
           shares_count: number | null
@@ -2557,6 +2561,7 @@ export type Database = {
           longitude: number
           max_actions?: number | null
           max_uses?: number | null
+          offer_type?: string
           original_price: number
           points_per_action?: number | null
           shares_count?: number | null
@@ -2594,6 +2599,7 @@ export type Database = {
           longitude?: number
           max_actions?: number | null
           max_uses?: number | null
+          offer_type?: string
           original_price?: number
           points_per_action?: number | null
           shares_count?: number | null
@@ -3114,6 +3120,7 @@ export type Database = {
           created_at: string
           entry_number: number
           id: string
+          number_of_entries: number
           raffle_id: string
           user_id: string
         }
@@ -3121,6 +3128,7 @@ export type Database = {
           created_at?: string
           entry_number: number
           id?: string
+          number_of_entries?: number
           raffle_id: string
           user_id: string
         }
@@ -3128,6 +3136,7 @@ export type Database = {
           created_at?: string
           entry_number?: number
           id?: string
+          number_of_entries?: number
           raffle_id?: string
           user_id?: string
         }
@@ -3157,8 +3166,11 @@ export type Database = {
           is_active: boolean | null
           max_participants: number | null
           prize: string
+          sold_tickets: number
           start_date: string
+          ticket_price: number
           title: string
+          total_tickets: number | null
           total_tickets_at_draw: number | null
           winner_id: string | null
           winning_ticket_number: number | null
@@ -3178,8 +3190,11 @@ export type Database = {
           is_active?: boolean | null
           max_participants?: number | null
           prize: string
+          sold_tickets?: number
           start_date?: string
+          ticket_price?: number
           title: string
+          total_tickets?: number | null
           total_tickets_at_draw?: number | null
           winner_id?: string | null
           winning_ticket_number?: number | null
@@ -3199,8 +3214,11 @@ export type Database = {
           is_active?: boolean | null
           max_participants?: number | null
           prize?: string
+          sold_tickets?: number
           start_date?: string
+          ticket_price?: number
           title?: string
+          total_tickets?: number | null
           total_tickets_at_draw?: number | null
           winner_id?: string | null
           winning_ticket_number?: number | null
