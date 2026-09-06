@@ -12,8 +12,10 @@ import { playMessageSound, playNotificationSound } from '@/lib/notificationSound
  */
 export const useUnifiedBadge = () => {
   const { user } = useAuth();
+  const userId = user?.id;
   const [unreadMessages, setUnreadMessages] = useState(0);
   const [unreadNotifications, setUnreadNotifications] = useState(0);
+  const channelInstanceId = useRef(crypto.randomUUID());
 
   const totalBadge = unreadMessages + unreadNotifications;
 
@@ -26,19 +28,19 @@ export const useUnifiedBadge = () => {
 
   // Fetch unread messages count
   const fetchUnreadMessages = useCallback(async () => {
-    if (!user) return 0;
+    if (!userId) return 0;
 
     try {
       const { data: userChats } = await supabase
         .from('chats')
         .select('id')
-        .or(`user_id.eq.${user.id},target_user_id.eq.${user.id}`);
+        .or(`user_id.eq.${userId},target_user_id.eq.${userId}`);
 
       const { data: businessData } = await supabase
         .from('businesses')
         .select('id')
-        .eq('owner_id', user.id)
-        .single();
+        .eq('owner_id', userId)
+        .maybeSingle();
 
       let allChatIds: string[] = [];
       if (userChats?.length) {
@@ -61,30 +63,30 @@ export const useUnifiedBadge = () => {
         .select('*', { count: 'exact', head: true })
         .in('chat_id', allChatIds)
         .eq('read', false)
-        .neq('sender_id', user.id);
+        .neq('sender_id', userId);
 
       return count || 0;
     } catch {
       return 0;
     }
-  }, [user]);
+  }, [userId]);
 
   // Fetch unread notifications count
   const fetchUnreadNotifications = useCallback(async () => {
-    if (!user) return 0;
+    if (!userId) return 0;
 
     try {
       const { count } = await supabase
         .from('notifications')
         .select('*', { count: 'exact', head: true })
-        .eq('user_id', user.id)
+        .eq('user_id', userId)
         .eq('is_read', false);
 
       return count || 0;
     } catch {
       return 0;
     }
-  }, [user]);
+  }, [userId]);
 
   // Refresh all counts
   const refreshBadge = useCallback(async () => {
@@ -100,17 +102,17 @@ export const useUnifiedBadge = () => {
   // Clear badge when app becomes visible
   useEffect(() => {
     const handleVisibility = () => {
-      if (document.visibilityState === 'visible' && user) {
+      if (document.visibilityState === 'visible' && userId) {
         refreshBadge();
       }
     };
     document.addEventListener('visibilitychange', handleVisibility);
     return () => document.removeEventListener('visibilitychange', handleVisibility);
-  }, [user, refreshBadge]);
+  }, [userId, refreshBadge]);
 
   // Initial load + real-time subscriptions
   useEffect(() => {
-    if (!user) {
+    if (!userId) {
       setUnreadMessages(0);
       setUnreadNotifications(0);
       syncBadge(0);
@@ -121,11 +123,11 @@ export const useUnifiedBadge = () => {
 
     // Subscribe to messages changes
     const msgChannel = supabase
-      .channel('unified-badge-messages')
+      .channel(`unified-badge-messages-${userId}-${channelInstanceId.current}`)
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, (payload) => {
         const newMsg = payload.new as any;
         // Play sound only for messages not sent by current user
-        if (newMsg.sender_id !== user.id) {
+        if (newMsg.sender_id !== userId) {
           playMessageSound();
         }
         fetchUnreadMessages().then(count => {
@@ -149,12 +151,12 @@ export const useUnifiedBadge = () => {
 
     // Subscribe to notifications changes (Pesca Digital, ofertas, sorteios, etc.)
     const notifChannel = supabase
-      .channel('unified-badge-notifications')
+      .channel(`unified-badge-notifications-${userId}-${channelInstanceId.current}`)
       .on('postgres_changes', {
         event: 'INSERT',
         schema: 'public',
         table: 'notifications',
-        filter: `user_id=eq.${user.id}`,
+        filter: `user_id=eq.${userId}`,
       }, () => {
         // Play sound for new notifications (Pesca Digital, etc.)
         playNotificationSound();
@@ -170,7 +172,7 @@ export const useUnifiedBadge = () => {
         event: 'UPDATE',
         schema: 'public',
         table: 'notifications',
-        filter: `user_id=eq.${user.id}`,
+        filter: `user_id=eq.${userId}`,
       }, () => {
         fetchUnreadNotifications().then(count => {
           setUnreadNotifications(count);
@@ -186,7 +188,7 @@ export const useUnifiedBadge = () => {
       supabase.removeChannel(msgChannel);
       supabase.removeChannel(notifChannel);
     };
-  }, [user?.id]);
+  }, [userId, fetchUnreadMessages, fetchUnreadNotifications, refreshBadge, syncBadge]);
 
   return {
     totalBadge,
