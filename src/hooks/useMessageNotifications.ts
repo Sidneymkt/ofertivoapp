@@ -51,6 +51,7 @@ export const useMessageNotifications = () => {
         .from('businesses')
         .select('id')
         .eq('owner_id', user.id)
+        .limit(1)
         .maybeSingle();
 
       if (cancelled) return;

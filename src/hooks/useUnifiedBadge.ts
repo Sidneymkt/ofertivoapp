@@ -40,6 +40,7 @@ export const useUnifiedBadge = () => {
         .from('businesses')
         .select('id')
         .eq('owner_id', userId)
+        .limit(1)
         .maybeSingle();
 
       let allChatIds: string[] = [];
