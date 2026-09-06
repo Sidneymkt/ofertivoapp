@@ -79,7 +79,7 @@ const Home = () => {
 
       {/* Hero Section */}
       <section className="relative min-h-[35vh] sm:min-h-[40vh] flex items-center justify-center overflow-hidden py-6 sm:py-8">
-        <img src={heroBackgroundSrc} alt="Background" loading="eager" fetchPriority="high" className="absolute inset-0 w-full h-full object-cover" />
+        <img src={heroBackgroundSrc} alt="Background" loading="eager" className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-primary/80 to-secondary/60" />
         
         <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4 w-full">

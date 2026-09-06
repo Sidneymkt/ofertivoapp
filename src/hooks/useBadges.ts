@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -26,14 +26,15 @@ export interface UserBadge {
 
 export const useBadges = () => {
   const { user } = useAuth();
+  const authUserId = user?.id;
+  const channelInstanceId = useRef(crypto.randomUUID());
   const [userBadges, setUserBadges] = useState<UserBadge[]>([]);
   const [availableBadges, setAvailableBadges] = useState<Badge[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchUserBadges = async (userId?: string) => {
-    if (!userId && !user) return;
-    
-    const targetUserId = userId || user!.id;
+    const targetUserId = userId ?? authUserId;
+    if (!targetUserId) return;
     
     try {
       const { data, error } = await supabase
@@ -129,21 +130,21 @@ export const useBadges = () => {
     };
 
     loadBadges();
-  }, [user]);
+  }, [authUserId]);
 
   // Real-time subscription for user badges
   useEffect(() => {
-    if (!user) return;
+    if (!authUserId) return;
 
     const channel = supabase
-      .channel(`user_badges_${user.id}`)
+      .channel(`user_badges_${authUserId}_${channelInstanceId.current}`)
       .on(
         'postgres_changes',
         {
           event: '*',
           schema: 'public',
           table: 'user_badges',
-          filter: `user_id=eq.${user.id}`
+          filter: `user_id=eq.${authUserId}`
         },
         (payload) => {
           console.log('Badge change detected:', payload);
@@ -156,7 +157,7 @@ export const useBadges = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [user]);
+  }, [authUserId]);
 
   return {
     userBadges,
