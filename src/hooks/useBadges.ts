@@ -33,9 +33,9 @@ export const useBadges = () => {
   const [loading, setLoading] = useState(true);
 
   const fetchUserBadges = async (userId?: string) => {
-    if (!userId && !user) return;
+    if (!userId) return;
     
-    const targetUserId = userId || user!.id;
+    const targetUserId = userId;
     
     try {
       const { data, error } = await supabase

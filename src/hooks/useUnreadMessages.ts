@@ -1,13 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 
 export const useUnreadMessages = () => {
   const { user } = useAuth();
+  const userId = user?.id;
   const [unreadCount, setUnreadCount] = useState(0);
+  const channelInstanceId = useRef(crypto.randomUUID());
 
   useEffect(() => {
-    if (!user) {
+    if (!userId) {
       setUnreadCount(0);
       return;
     }
@@ -18,14 +20,15 @@ export const useUnreadMessages = () => {
         const { data: userChats } = await supabase
           .from('chats')
           .select('id')
-          .or(`user_id.eq.${user.id},target_user_id.eq.${user.id}`);
+          .or(`user_id.eq.${userId},target_user_id.eq.${userId}`);
 
         // Buscar chats de negócios do usuário
         const { data: businessData } = await supabase
           .from('businesses')
           .select('id')
-          .eq('owner_id', user.id)
-          .single();
+          .eq('owner_id', userId)
+          .limit(1)
+          .maybeSingle();
 
         let allChatIds: string[] = [];
 
@@ -57,7 +60,7 @@ export const useUnreadMessages = () => {
           .select('*', { count: 'exact', head: true })
           .in('chat_id', allChatIds)
           .eq('read', false)
-          .neq('sender_id', user.id);
+          .neq('sender_id', userId);
 
         setUnreadCount(count || 0);
       } catch (error) {
@@ -69,7 +72,7 @@ export const useUnreadMessages = () => {
 
     // Subscrever a novas mensagens em tempo real
     const channel = supabase
-      .channel('unread-messages-count')
+      .channel(`unread-messages-count-${userId}-${channelInstanceId.current}`)
       .on(
         'postgres_changes',
         {
@@ -86,7 +89,7 @@ export const useUnreadMessages = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [user?.id]);
+  }, [userId]);
 
   return { unreadCount };
 };
