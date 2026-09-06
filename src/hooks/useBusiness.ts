@@ -1,5 +1,5 @@
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 
@@ -14,6 +14,10 @@ export const useBusiness = () => {
   const [business, setBusiness] = useState<BusinessRow | null>(null);
   const [loading, setLoading] = useState(true);
   const [version, setVersion] = useState(0);
+  // Several mounted components use this hook at the same time. Supabase reuses
+  // channels with the same topic, so a shared topic can already be subscribed
+  // when another hook instance tries to add its callback.
+  const channelInstanceId = useRef(crypto.randomUUID());
 
   const loadBusiness = useCallback(async (isMounted = true) => {
     if (authLoading) {
@@ -89,7 +93,7 @@ export const useBusiness = () => {
 
     if (user && isAuthenticated && !authLoading) {
       const channel = supabase
-        .channel(`owner-business-sync-${user.id}`)
+        .channel(`owner-business-sync-${user.id}-${channelInstanceId.current}`)
         .on(
           'postgres_changes' as any,
           {
