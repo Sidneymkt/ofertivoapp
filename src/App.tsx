@@ -105,13 +105,13 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
-            <AuthProvider>
-              <InstallPrompt />
-              <UpdatePrompt />
-              <MessageNotificationProvider />
-              <ScrollToTop />
-              <RoutePrefetcher />
-              <ErrorBoundary>
+            <ErrorBoundary>
+              <AuthProvider>
+                <InstallPrompt />
+                <UpdatePrompt />
+                <MessageNotificationProvider />
+                <ScrollToTop />
+                <RoutePrefetcher />
               <Suspense fallback={<RouteFallback />}>
               <Routes>
               {/* Redirect helper for legacy singular URL */}
@@ -206,8 +206,8 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
               </Routes>
               </Suspense>
-              </ErrorBoundary>
-            </AuthProvider>
+              </AuthProvider>
+            </ErrorBoundary>
           </BrowserRouter>
         </TooltipProvider>
       </ThemeProvider>

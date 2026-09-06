@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { useToast } from './use-toast';
@@ -23,6 +23,7 @@ export const useMessageNotifications = () => {
   const { toast } = useToast();
   const [hasPermission, setHasPermission] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
+  const channelInstanceId = useRef(crypto.randomUUID());
 
   // Check notification permission (don't auto-request, let user enable via settings)
   useEffect(() => {
@@ -34,6 +35,9 @@ export const useMessageNotifications = () => {
   // Monitor new messages
   useEffect(() => {
     if (!user) return;
+
+    let cancelled = false;
+    let channel: ReturnType<typeof supabase.channel> | null = null;
 
     const setupMessageListener = async () => {
       // Get user's chats
@@ -47,7 +51,9 @@ export const useMessageNotifications = () => {
         .from('businesses')
         .select('id')
         .eq('owner_id', user.id)
-        .single();
+        .maybeSingle();
+
+      if (cancelled) return;
 
       let allChatIds: string[] = [];
 
@@ -81,8 +87,8 @@ export const useMessageNotifications = () => {
       updateAppBadge(initialCount);
 
       // Subscribe to new messages
-      const channel = supabase
-        .channel('message-notifications')
+      channel = supabase
+        .channel(`message-notifications-${user.id}-${channelInstanceId.current}`)
         .on(
           'postgres_changes',
           {
@@ -181,13 +187,17 @@ export const useMessageNotifications = () => {
         )
         .subscribe();
 
-      return () => {
-        supabase.removeChannel(channel);
-      };
     };
 
-    setupMessageListener();
-  }, [user, hasPermission, toast]);
+    void setupMessageListener().catch((error) => {
+      console.error('[useMessageNotifications] Failed to start listener:', error);
+    });
+
+    return () => {
+      cancelled = true;
+      if (channel) void supabase.removeChannel(channel);
+    };
+  }, [user?.id, hasPermission, toast]);
 
   // Function to clear badge when user reads messages
   const clearBadge = () => {
