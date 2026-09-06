@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS "Participants can view their raffles" ON public.raffles;
