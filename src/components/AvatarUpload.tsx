@@ -1,11 +1,13 @@
 
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Camera, Upload, X } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
+import { useStorageImageUrl } from '@/hooks/useStorageImageUrl';
+import { removeStorageImage } from '@/lib/storageImages';
 
 interface AvatarUploadProps {
   currentAvatarUrl?: string | null;
@@ -27,6 +29,11 @@ export const AvatarUpload: React.FC<AvatarUploadProps> = ({
   const [uploading, setUploading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { url: storedAvatarUrl, handleError } = useStorageImageUrl(currentAvatarUrl);
+
+  useEffect(() => () => {
+    if (previewUrl?.startsWith('blob:')) URL.revokeObjectURL(previewUrl);
+  }, [previewUrl]);
 
   const sizeClasses = {
     sm: 'w-16 h-16',
@@ -70,23 +77,6 @@ export const AvatarUpload: React.FC<AvatarUploadProps> = ({
       const fileExt = compressed.name.split('.').pop();
       const fileName = `${user.id}/avatar.${fileExt}`;
 
-      // Delete old avatar if exists
-      if (currentAvatarUrl) {
-        const oldPath = (() => {
-          try {
-            const pathname = new URL(currentAvatarUrl).pathname;
-            return pathname.split('/avatars/')[1];
-          } catch {
-            return currentAvatarUrl.split('/avatars/')[1]?.split('?')[0];
-          }
-        })();
-        if (oldPath && oldPath !== fileName) {
-          await supabase.storage
-            .from('avatars')
-            .remove([oldPath]);
-        }
-      }
-
       // Upload new avatar
       const { error: uploadError } = await supabase.storage
         .from('avatars')
@@ -102,7 +92,7 @@ export const AvatarUpload: React.FC<AvatarUploadProps> = ({
         .from('avatars')
         .getPublicUrl(fileName);
 
-      const avatarUrl = `${data.publicUrl}?t=${Date.now()}`;
+      const avatarUrl = data.publicUrl;
 
       // Update profile with new avatar URL
       const { error: updateError } = await supabase
@@ -111,6 +101,10 @@ export const AvatarUpload: React.FC<AvatarUploadProps> = ({
         .eq('user_id', user.id);
 
       if (updateError) throw updateError;
+
+      if (currentAvatarUrl && !currentAvatarUrl.includes(`/${fileName}`)) {
+        await removeStorageImage(currentAvatarUrl);
+      }
 
       onAvatarChange(avatarUrl);
       setPreviewUrl(null);
@@ -137,11 +131,17 @@ export const AvatarUpload: React.FC<AvatarUploadProps> = ({
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setPreviewUrl(e.target?.result as string);
-      };
-      reader.readAsDataURL(file);
+      if (!file.type.startsWith('image/')) {
+        toast({ title: 'Arquivo inválido', description: 'Escolha uma imagem.', variant: 'destructive' });
+        event.target.value = '';
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        toast({ title: 'Imagem muito grande', description: 'Escolha uma imagem de até 5 MB.', variant: 'destructive' });
+        event.target.value = '';
+        return;
+      }
+      setPreviewUrl(URL.createObjectURL(file));
     }
   };
 
@@ -159,13 +159,13 @@ export const AvatarUpload: React.FC<AvatarUploadProps> = ({
     }
   };
 
-  const displayUrl = previewUrl || currentAvatarUrl;
+  const displayUrl = previewUrl || storedAvatarUrl;
 
   return (
     <div className="flex flex-col items-center gap-4 w-full">
       <div className="relative z-0">
         <Avatar className={sizeClasses[size]}>
-          <AvatarImage src={displayUrl || undefined} />
+          <AvatarImage src={displayUrl || undefined} onError={handleError} />
           <AvatarFallback className="text-2xl bg-gradient-primary text-white">
             {user?.email?.charAt(0)?.toUpperCase() || 'U'}
           </AvatarFallback>
