@@ -10,6 +10,8 @@ import 'react-image-crop/dist/ReactCrop.css';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { useQueryClient } from '@tanstack/react-query';
 import { syncBusinessProfileUpdate } from '@/lib/businessProfileSync';
+import { useStorageImageUrl } from '@/hooks/useStorageImageUrl';
+import { removeStorageImage } from '@/lib/storageImages';
 
 interface CoverImageUploadProps {
   currentCoverUrl?: string | null;
@@ -47,6 +49,7 @@ export const CoverImageUpload: React.FC<CoverImageUploadProps> = ({
   const imgRef = useRef<HTMLImageElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const { url: displayedCoverUrl, isLoading: coverLoading, handleError: handleCoverError } = useStorageImageUrl(currentCoverUrl);
 
   const onImageLoad = useCallback((e: React.SyntheticEvent<HTMLImageElement>) => {
     const { width, height } = e.currentTarget;
@@ -166,19 +169,6 @@ export const CoverImageUpload: React.FC<CoverImageUploadProps> = ({
 
       console.log('[CoverUpload] Starting upload:', { bucketName, fileName, entityType, entityId });
 
-      // Delete old cover if exists
-      if (currentCoverUrl) {
-        try {
-          const oldPath = currentCoverUrl.split('/').slice(-2).join('/');
-          if (oldPath && !oldPath.includes('?')) {
-            console.log('[CoverUpload] Removing old cover:', oldPath);
-            await supabase.storage.from(bucketName).remove([oldPath]);
-          }
-        } catch (deleteError) {
-          console.warn('[CoverUpload] Error deleting old cover:', deleteError);
-        }
-      }
-
       // Upload new cover
       const { error: uploadError } = await supabase.storage
         .from(bucketName)
@@ -199,7 +189,7 @@ export const CoverImageUpload: React.FC<CoverImageUploadProps> = ({
         .from(bucketName)
         .getPublicUrl(fileName);
 
-      const coverUrl = `${data.publicUrl}?t=${Date.now()}`;
+      const coverUrl = data.publicUrl;
       console.log('[CoverUpload] New cover URL:', coverUrl);
 
       // Update profile or business with new cover URL
@@ -237,6 +227,10 @@ export const CoverImageUpload: React.FC<CoverImageUploadProps> = ({
           .eq('user_id', user.id)
           .single();
         console.log('[CoverUpload] Profile cover verified:', verifyData);
+      }
+
+      if (currentCoverUrl && !currentCoverUrl.includes(`/${fileName}`)) {
+        await removeStorageImage(currentCoverUrl);
       }
 
       console.log('[CoverUpload] Calling onCoverChange with URL:', coverUrl);
@@ -331,21 +325,16 @@ export const CoverImageUpload: React.FC<CoverImageUploadProps> = ({
       <div className={cn("relative", className)}>
         {/* Cover Image Display */}
         <div className="relative w-full h-48 sm:h-64 lg:h-80 overflow-hidden rounded-lg bg-gradient-to-br from-primary/10 to-accent/10">
-          {currentCoverUrl ? (
+          {displayedCoverUrl ? (
             <img
-              key={currentCoverUrl}
-              src={currentCoverUrl}
+              key={displayedCoverUrl}
+              src={displayedCoverUrl}
               alt="Imagem de capa"
               className="w-full h-full object-cover"
-              loading="lazy"
-              onLoad={() => console.log('[CoverUpload] Image loaded:', currentCoverUrl)}
-              onError={(e) => {
-                console.error('[CoverUpload] Image load error:', currentCoverUrl);
-                console.error('[CoverUpload] Error event:', e);
-              }}
+              onError={handleCoverError}
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center">
+            <div className={cn("w-full h-full flex items-center justify-center", coverLoading && "animate-pulse")}>
               <ImageIcon className="w-16 h-16 text-muted-foreground/30" />
             </div>
           )}

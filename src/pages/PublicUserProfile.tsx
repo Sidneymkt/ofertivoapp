@@ -17,6 +17,7 @@ import { ChatWindow } from '@/components/ChatWindow';
 import { SEOHead } from '@/components/SEOHead';
 import { ShareMenu } from '@/components/ShareMenu';
 import { useUserProfileRealtimeSync } from '@/hooks/useRealtimeSubscription';
+import { useStorageImageUrl } from '@/hooks/useStorageImageUrl';
 import {
   MapPin, 
   Award, 
@@ -482,27 +483,26 @@ const PublicUserProfile = () => {
           {/* Cover Image and Avatar */}
           <div className="relative mb-4">
             {/* Cover Image */}
-            {(profile as any)?.cover_image_url && (
+            {resolvedCoverUrl && (
               <div className="w-full aspect-[16/6] sm:aspect-[16/5] md:aspect-[16/5] lg:aspect-[16/4] overflow-hidden rounded-lg">
                 <img
-                  key={(profile as any).cover_image_url}
-                  src={(profile as any).cover_image_url}
+                  key={resolvedCoverUrl}
+                  src={resolvedCoverUrl}
                   alt="Capa do perfil"
                   className="w-full h-full object-cover"
-                  onLoad={() => console.log('[PublicUserProfile] Cover loaded:', (profile as any).cover_image_url)}
-                  onError={(e) => console.error('[PublicUserProfile] Cover load error:', e)}
+                  onError={handleCoverError}
                 />
               </div>
             )}
             {/* Placeholder when no cover */}
-            {!(profile as any)?.cover_image_url && (
-              <div className="w-full aspect-[16/6] sm:aspect-[16/5] md:aspect-[16/5] lg:aspect-[16/4] overflow-hidden rounded-lg bg-gradient-to-br from-primary/10 to-accent/10" />
+            {!resolvedCoverUrl && (
+              <div className={`w-full aspect-[16/6] sm:aspect-[16/5] md:aspect-[16/5] lg:aspect-[16/4] overflow-hidden rounded-lg bg-gradient-to-br from-primary/10 to-accent/10 ${coverLoading ? 'animate-pulse' : ''}`} />
             )}
             
             {/* Avatar positioned over the cover */}
             <div className="absolute -bottom-14 left-6">
               <Avatar className="w-28 h-28 border-4 border-background shadow-lg">
-                <AvatarImage src={profile.avatar_url} />
+                <AvatarImage src={resolvedAvatarUrl || undefined} onError={handleAvatarError} />
                 <AvatarFallback className="text-3xl bg-primary/20">
                   {profile.full_name?.[0] || 'U'}
                 </AvatarFallback>
