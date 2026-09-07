@@ -1,5 +1,9 @@
 # Roadmap
 
+- [ ] Melhorar carregamento de avatar e capa
+  - [ ] Evitar imagem quebrada na capa e no avatar
+  - [ ] Salvar imagens com caminho estável e atualização imediata
+  - [ ] Validar o perfil após a correção
 - [x] Corrigir carregamento persistente em sessão autenticada
   - [x] Impedir inscrições duplicadas de notificações em tempo real
   - [x] Proteger toda a inicialização com a tela de recuperação
