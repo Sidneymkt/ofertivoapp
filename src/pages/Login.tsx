@@ -17,7 +17,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [loginType, setLoginType] = useState<'consumer' | 'business'>('consumer');
   const [rememberMe, setRememberMe] = useState(false);
-  const { signIn, isAuthenticated, isLoading, userProfile } = useAuth();
+  const { signIn, signInWithGoogle, isAuthenticated, isLoading, userProfile } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -208,7 +208,7 @@ const Login = () => {
                 variant="outline"
                 className="w-full"
                 size="lg"
-                onClick={() => handleOAuth('google')}
+                onClick={handleGoogle}
                 disabled={isLoading}
               >
                 <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24">
