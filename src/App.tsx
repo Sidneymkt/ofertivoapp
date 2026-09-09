@@ -133,8 +133,10 @@ const App = () => (
             <Route path="/meus-sorteios" element={<MyRaffles />} />
             <Route path="/perfil" element={<Profile />} />
             <Route path="/favoritos" element={<Favorites />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/cadastro" element={<Register />} />
+           <Route path="/login" element={<Login />} />
+           <Route path="/auth/callback" element={<AuthCallback />} />
+           <Route path="/cadastro" element={<Register />} />
+
             <Route path="/recuperar-senha" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/redefinir-senha" element={<ResetPassword />} />
