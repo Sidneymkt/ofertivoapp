@@ -108,21 +108,15 @@ const Login = () => {
     }
   };
 
-  const handleOAuth = async (provider: 'google' | 'apple') => {
-    try {
-      const params = new URLSearchParams(location.search);
-      const redirect = params.get('redirect');
-      const redirectTo = `${window.location.origin}${redirect || (loginType === 'business' ? '/dashboard' : '/ofertas')}`;
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider,
-        options: { redirectTo },
-      });
-      if (error) throw error;
-    } catch (err: any) {
-      console.error('[Login] OAuth error:', err);
-      toast.error(err?.message || `Erro ao entrar com ${provider}`);
-    }
+  const handleGoogle = async () => {
+    const params = new URLSearchParams(location.search);
+    const redirect = params.get('redirect');
+    await signInWithGoogle(loginType, {
+      redirect: redirect || undefined,
+      mode: 'login',
+    });
   };
+
 
   // Remover redirecionamento automático no useEffect para evitar conflitos
   // O redirecionamento será feito apenas após login bem-sucedido
