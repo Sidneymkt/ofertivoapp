@@ -1,8 +1,10 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import { User, Session } from '@supabase/supabase-js'
 import { supabase } from '@/lib/supabase'
+import { lovable } from '@/integrations/lovable/index'
 import { toast } from 'sonner'
 import { getAppBaseUrl } from '@/lib/config'
+import { saveOAuthIntent, getOAuthRedirectUrl, clearOAuthIntent, type OAuthLoginType } from '@/lib/oauthIntent'
 
 interface AuthState {
   user: User | null
@@ -11,15 +13,23 @@ interface AuthState {
   userProfile: any | null
 }
 
+interface GoogleSignInOptions {
+  referralCode?: string
+  redirect?: string
+  mode?: 'login' | 'register'
+}
+
 interface AuthContextType extends AuthState {
   signIn: (email: string, password: string, loginType?: 'consumer' | 'business') => Promise<any>
   signUp: (email: string, password: string, userData: any) => Promise<any>
+  signInWithGoogle: (loginType?: OAuthLoginType, options?: GoogleSignInOptions) => Promise<any>
   signOut: () => Promise<any>
   updateProfile: (updates: any) => Promise<any>
   resetPassword: (email: string) => Promise<any>
   isAuthenticated: boolean
   isLoading: boolean
 }
+
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
@@ -260,13 +270,52 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
+  const signInWithGoogle = async (
+    loginType: OAuthLoginType = 'consumer',
+    options?: GoogleSignInOptions
+  ) => {
+    try {
+      saveOAuthIntent({
+        loginType,
+        referralCode: options?.referralCode,
+        redirect: options?.redirect,
+        mode: options?.mode ?? 'login'
+      })
+
+      const result = await lovable.auth.signInWithOAuth('google', {
+        redirect_uri: getOAuthRedirectUrl()
+      })
+
+      if (result.error) {
+        clearOAuthIntent()
+        toast.error('Não foi possível entrar com Google. Tente novamente.')
+        return { success: false, error: result.error }
+      }
+
+      if (result.redirected) {
+        return { success: true, redirected: true }
+      }
+
+      // Sessão já definida (fluxo em popup): o callback finaliza o perfil
+      window.location.assign(getOAuthRedirectUrl())
+      return { success: true }
+    } catch (error: any) {
+      clearOAuthIntent()
+      console.error('[Auth] Google OAuth error:', error)
+      toast.error('Erro ao entrar com Google')
+      return { success: false, error }
+    }
+  }
+
   return (
     <AuthContext.Provider
       value={{
         ...authState,
         signIn,
         signUp,
+        signInWithGoogle,
         signOut,
+
         updateProfile,
         resetPassword,
         isAuthenticated: !!authState.user,

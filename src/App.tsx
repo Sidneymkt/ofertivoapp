@@ -28,6 +28,8 @@ const Points = lazy(() => import("./pages/Points"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Favorites = lazy(() => import("./pages/Favorites"));
 const Login = lazy(() => import("./pages/Login"));
+const AuthCallback = lazy(() => import("./pages/AuthCallback"));
+
 const Register = lazy(() => import("./pages/Register"));
 const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
@@ -133,8 +135,10 @@ const App = () => (
             <Route path="/meus-sorteios" element={<MyRaffles />} />
             <Route path="/perfil" element={<Profile />} />
             <Route path="/favoritos" element={<Favorites />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/cadastro" element={<Register />} />
+           <Route path="/login" element={<Login />} />
+           <Route path="/auth/callback" element={<AuthCallback />} />
+           <Route path="/cadastro" element={<Register />} />
+
             <Route path="/recuperar-senha" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/redefinir-senha" element={<ResetPassword />} />
