@@ -1,8 +1,10 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import { User, Session } from '@supabase/supabase-js'
 import { supabase } from '@/lib/supabase'
+import { lovable } from '@/integrations/lovable/index'
 import { toast } from 'sonner'
 import { getAppBaseUrl } from '@/lib/config'
+import { saveOAuthIntent, getOAuthRedirectUrl, clearOAuthIntent, type OAuthLoginType } from '@/lib/oauthIntent'
 
 interface AuthState {
   user: User | null
@@ -11,15 +13,23 @@ interface AuthState {
   userProfile: any | null
 }
 
+interface GoogleSignInOptions {
+  referralCode?: string
+  redirect?: string
+  mode?: 'login' | 'register'
+}
+
 interface AuthContextType extends AuthState {
   signIn: (email: string, password: string, loginType?: 'consumer' | 'business') => Promise<any>
   signUp: (email: string, password: string, userData: any) => Promise<any>
+  signInWithGoogle: (loginType?: OAuthLoginType, options?: GoogleSignInOptions) => Promise<any>
   signOut: () => Promise<any>
   updateProfile: (updates: any) => Promise<any>
   resetPassword: (email: string) => Promise<any>
   isAuthenticated: boolean
   isLoading: boolean
 }
+
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
