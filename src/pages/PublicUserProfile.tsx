@@ -260,6 +260,17 @@ const PublicUserProfile = () => {
     }
   };
 
+  const {
+    url: resolvedCoverUrl,
+    isLoading: coverLoading,
+    handleError: handleCoverError,
+  } = useStorageImageUrl(userProfile?.profile?.cover_image_url);
+
+  const {
+    url: resolvedAvatarUrl,
+    handleError: handleAvatarError,
+  } = useStorageImageUrl(userProfile?.profile?.avatar_url);
+
   const handleShare = async () => {
     const shareData = {
       title: `Perfil de ${userProfile?.profile?.full_name || 'Usuário Ofertivo'}`,
