@@ -8,6 +8,43 @@ import { ThemeProvider } from "next-themes";
 import { HelmetProvider } from "react-helmet-async";
 import { ScrollToTop } from "./components/ScrollToTop";
 import { AuthProvider } from "./contexts/AuthContext";
+import { GoogleLogin } from "react-google-login";
+import { GoogleOAuthProvider } from "react-google-login";
+import { GoogleLoginButton } from "./components/ui/google-login-button";
+
+const App = () => {
+  return (
+    <ThemeProvider theme={theme}>
+      <HelmetProvider>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            <GoogleOAuthProvider clientId="YOUR_CLIENT_ID">
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/google-login" element={<GoogleLoginButton />} />
+                </Routes>
+              </BrowserRouter>
+            </GoogleOAuthProvider>
+          </AuthProvider>
+        </QueryClientProvider>
+      </HelmetProvider>
+    </ThemeProvider>
+  );
+};
+
+export default App;
+
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route, Navigate, useParams } from "react-router-dom";
+import { ThemeProvider } from "next-themes";
+import { HelmetProvider } from "react-helmet-async";
+import { ScrollToTop } from "./components/ScrollToTop";
+import { AuthProvider } from "./contexts/AuthContext";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { MessageNotificationProvider } from "./components/MessageNotificationProvider";
 import { InstallPrompt } from "./components/InstallPrompt";
