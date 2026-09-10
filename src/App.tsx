@@ -11,7 +11,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { MessageNotificationProvider } from "./components/MessageNotificationProvider";
 import { InstallPrompt } from "./components/InstallPrompt";
-import { UpdatePrompt } fromm "./components/UpdatePrompt";
+import { UpdatePrompt } from "./components/UpdatePrompt";
 import { RoutePrefetcher } from "./components/RoutePrefetcher";
 import { RouteFallback } from "./components/RouteFallback";
 import { getMapboxToken } from "./lib/mapTokenCache";
