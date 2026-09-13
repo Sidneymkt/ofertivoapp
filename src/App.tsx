@@ -15,6 +15,7 @@ import { GoogleLoginButton } from "./components/ui/google-login-button";
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
+      <ReferralSystem> // Adicionar ReferralSystem como wrapper
       <HelmetProvider>
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
@@ -31,6 +32,7 @@ const App = () => {
         </QueryClientProvider>
       </HelmetProvider>
     </ThemeProvider>
+    </ReferralSystem> // Fechar ReferralSystem
   );
 };
 
