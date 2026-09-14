@@ -15,6 +15,29 @@ import { GoogleLoginButton } from "./components/ui/google-login-button";
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
+      <ReferralSystem>
+      <HelmetProvider>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            <GoogleOAuthProvider clientId="YOUR_CLIENT_ID">
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/google-login" element={<GoogleLoginButton />} />
+                  <Route path="/institutional-video" element={<InstitutionalVideo />} />
+                </Routes>
+              </BrowserRouter>
+            </GoogleOAuthProvider>
+          </AuthProvider>
+        </QueryClientProvider>
+      </HelmetProvider>
+    </ReferralSystem>
+    </ThemeProvider>
+  );
+};
+  return (
+    <ThemeProvider theme={theme}>
       <ReferralSystem> // Adicionar ReferralSystem como wrapper
       <HelmetProvider>
         <QueryClientProvider client={queryClient}>
